@@ -1,0 +1,77 @@
+[1mdiff --git a/DB/loadData.sql b/DB/loadData.sql[m
+[1mindex 7a1ece0..c1a69eb 100644[m
+[1m--- a/DB/loadData.sql[m
+[1m+++ b/DB/loadData.sql[m
+[36m@@ -1,22 +1,25 @@[m
+[31m- /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;[m
+[32m+[m[32m /*!40000 ALTER TABLE `persona` DISABLE KEYS */;[m
+ INSERT INTO `persona` (`dni_persona`,`apellido`,`nombre`) VALUES[m
+[31m- (43189994,'SUAREZ','MATEO'),[m
+[32m+[m[32m-- (43189994,'SUAREZ','MATEO'),[m
+  (43433129,'ARIAS SCHIAVI','JUAN PABLO'),[m
+[31m- (30214255,'BARALE','MAYCO'),[m
+[31m- (22943126,'BETTIOL','NICOLAS MATIAS'),[m
+[32m+[m[32m-- (30214255,'BARALE','MAYCO'),[m
+[32m+[m[32m-- (22943126,'BETTIOL','NICOLAS MATIAS'),[m
+  (37263176,'BONO','FEDERICO'),[m
+[31m- (26013149,'CABRAL','HERNAN'),[m
+[31m- (34148124,'CAMPAGNA','JULIETA'),[m
+[32m+[m[32m-- (26013149,'CABRAL','HERNAN'),[m
+[32m+[m[32m-- (34148124,'CAMPAGNA','JULIETA'),[m
+  (41221496,'CAMPOS','GONZALO'),[m
+[31m- (31228919,'CARDETTI','SILVINA'),[m
+[31m- (19452983,'CARRENO','GERMAN'),[m
+[31m- (24150753,'CASTELLI','JESUS'),[m
+[32m+[m[32m-- (31228919,'CARDETTI','SILVINA'),[m
+[32m+[m[32m-- (19452983,'CARRENO','GERMAN'),[m
+[32m+[m[32m-- (24150753,'CASTELLI','JESUS'),[m
+  (42119854,'CASTELLINA','FRANCO'),[m
+  (35253256,'CHIOTTA','FRANCISCO'),[m
+[31m- (33578090,'DOMINGUEZ','ELIANA'),[m
+[31m- (29934733,'TURLETTI','LUCAS'),[m
+[31m- (21437887,'PAUTASSO','MATIAS'),[m
+[31m- (40124612,'ONTIVERO','MARIANO');[m
+[32m+[m[32m-- (33578090,'DOMINGUEZ','ELIANA'),[m
+[32m+[m[32m-- (29934733,'TURLETTI','LUCAS'),[m
+[32m+[m[32m-- (21437887,'PAUTASSO','MATIAS'),[m
+[32m+[m[32m (40124612,'ONTIVERO','MARIANO')[m
+[32m+[m[32m-- (42788292,'FERREYRA','LUDMILA')[m
+[32m+[m[32m-- (39102573,'BELTRAME','PAULA')[m[41m [m
+[32m+[m[32m;[m
+ [m
+ INSERT INTO `cliente` (`dni_cliente`,`fecha_1ra_vez`) VALUES [m
+  ('43189994',14-05-2020),[m
+[36m@@ -28,10 +31,27 @@[m [mINSERT INTO `cliente` (`dni_cliente`,`fecha_1ra_vez`) VALUES[m
+ /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;[m
+ [m
+ INSERT INTO `mucama` (`dni_mucama`,`fecha_ingreso`,`sueldo`) VALUES [m
+[31m- ('43189994',14-05-2020,39167.00),[m
+[31m- ('21437887',02-11-2010,45250.00),[m
+[31m- ('24150753',21-01-2012,39167.00),[m
+[31m- ('22943126',29-08-2016,45250.00),[m
+[31m- ('30214255',17-06-2018,39167.00),[m
+[31m- ('33578090',23-09-2014,59633.00);[m
+[32m+[m[32m ('42788292',05-05-2020,39167.00),[m
+[32m+[m[32m ('33578090',02-01-2012,65250.00),[m
+[32m+[m[32m ('34148124',08-01-2020,39167.00),[m
+[32m+[m[32m ('39102573',05-06-2020,39167.00),[m
+[32m+[m[32m ('31228919',07-02-2010,71633.00);[m
+ /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;[m
+[32m+[m
+[32m+[m
+[32m+[m[32mINSERT INTO `mucama` (`dni_mucama`,`fecha_ingreso`,`sueldo`) VALUES[m[41m [m
+[32m+[m[32m ('42788292',05-05-2020,39167.00),[m
+[32m+[m[32m ('33578090',02-01-2012,65250.00),[m
+[32m+[m[32m ('34148124',08-01-2020,39167.00),[m
+[32m+[m[32m ('39102573',05-06-2020,39167.00),[m
+[32m+[m[32m ('31228919',07-02-2010,71633.00);[m
+[32m+[m[32m/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;[m
+[32m+[m
+[32m+[m
+[32m+[m[32mINSERT INTO `gerente` (`dni_gerente`,`fecha_ingreso`,`sueldo`) VALUES[m[41m [m
+[32m+[m[32m ('29934733',03-02-2020,97167.00),[m
+[32m+[m[32m ('26013149',06-10-2011,127250.00),[m
+[32m+[m[32m ('19452983',01-01-2010,150630.00);[m
+[32m+[m[32m/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;[m
+[41m+[m
+[41m+[m
