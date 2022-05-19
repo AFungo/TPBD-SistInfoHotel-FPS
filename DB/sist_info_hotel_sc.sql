@@ -11,7 +11,7 @@ use gestion_hotel_sc;
 
 drop table if exists `persona`;
 create table `persona`(
-	dni_persona int not null primary key,
+	dni_persona int(10) not null primary key,
     nombre varchar(40) not null,
     apellido varchar(40) not null
 );
@@ -91,7 +91,7 @@ create table `habitacion`(
 	cant_camas int not null, -- mayor que 0 menor que 3 habitaciones hasta triples
     cod_tipo int not null,
     constraint foreign key (cod_tipo) references tipo_habitacion (cod_tipo).
-	constraint cant_camas_rest check(cant_camas>0 and cant_camas<4),
+	constraint cant_camas_rest check(cant_camas>0), -- falta poner que tiene que ser >4
     constraint nh_positive check(nro_habitacion >= 0)
 );
 
