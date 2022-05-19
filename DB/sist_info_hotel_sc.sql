@@ -30,13 +30,15 @@ create table `cliente`(
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.mucama`
 -- 
-
+SELECT CURDATE() AS Today;
 drop table if exists `mucama`;
 create table `mucama`(
 	dni_mucama int not null primary key,
-    fecha_ingreso date not null,
-    sueldo float not null,
-    constraint foreign key (dni_mucama) references persona (dni_persona)
+    fecha_ingreso date not null, -- previa a la fecha corriente
+    sueldo float not null,-- positivo
+    constraint foreign key (dni_mucama) references persona (dni_persona),
+    constraint sueldo_positive check(sueldo >= 0),
+    constraint fecha_current check (Today > fecha_ingreso)
 );
 
 -- 
@@ -46,9 +48,10 @@ create table `mucama`(
 drop table if exists `gerente`;
 create table `gerente`(
 	dni_gerente int not null primary key,
-    fecha_ingreso date not null,
-    sueldo float not null,
-    constraint foreign key (dni_gerente) references persona (dni_persona)
+    fecha_ingreso date not null, -- previa a la fecha corriente
+    sueldo float not null, -- positivo
+    constraint foreign key (dni_gerente) references persona (dni_persona),
+    constraint sueldo_positive check(sueldo >= 0)
 );
 
 -- 
@@ -59,9 +62,10 @@ drop table if exists `comision`;
 create table `comision`(
 	nro_comision int not null,
 	dni_gerente int not null,
-    monto float not null,
+    monto float not null, -- positivo
     constraint foreign key (dni_gerente) references gerente (dni_gerente),
-	constraint primary key (nro_comision, dni_gerente)
+	constraint primary key (nro_comision, dni_gerente),
+    constraint nc_positive check(nro_comision >= 0)
 );
 
 -- 
@@ -72,7 +76,9 @@ drop table if exists `tipo_habitacion`;
 create table `tipo_habitacion`(
 	cod_tipo int not null primary key,
 	descripcion varchar(200) not null,
-    costo float not null
+    costo float not null, -- positivo
+    constraint costo_positive check(costo>=0),
+    constraint ct_positive check(cod_tipo>=0)
 );
 
 -- 
@@ -81,10 +87,12 @@ create table `tipo_habitacion`(
 
 drop table if exists `habitacion`;
 create table `habitacion`(
-	nro_habitacion int not null primary key,
-	cant_camas int not null,
+	nro_habitacion int not null primary key, -- positivo
+	cant_camas int not null, -- mayor que 0 menor que 3 habitaciones hasta triples
     cod_tipo int not null,
-    constraint foreign key (cod_tipo) references tipo_habitacion (cod_tipo)
+    constraint foreign key (cod_tipo) references tipo_habitacion (cod_tipo).
+	constraint cant_camas_rest check(cant_camas>0 and cant_camas<4),
+    constraint nh_positive check(nro_habitacion >= 0)
 );
 
 -- 
@@ -122,5 +130,6 @@ create table `ocupada`(
     constraint foreign key (nro_habitacion) references habitacion (nro_habitacion),
     constraint foreign key (fecha) references fecha (fecha),
     constraint foreign key (dni_cliente) references cliente (dni_cliente),
-	constraint primary key (nro_habitacion, fecha)
+	constraint primary key (nro_habitacion, fecha),
+    constraint pn_positive check(precio_noche>0)
 );
