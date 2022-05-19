@@ -30,6 +30,7 @@ create table `cliente`(
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.mucama`
 -- 
+
 SELECT CURDATE() AS Today;
 drop table if exists `mucama`;
 create table `mucama`(
@@ -90,7 +91,7 @@ create table `habitacion`(
 	nro_habitacion int not null primary key, -- positivo
 	cant_camas int not null, -- mayor que 0 menor que 3 habitaciones hasta triples
     cod_tipo int not null,
-    constraint foreign key (cod_tipo) references tipo_habitacion (cod_tipo).
+    constraint foreign key (cod_tipo) references tipo_habitacion (cod_tipo),
 	constraint cant_camas_rest check(cant_camas>0 and cant_camas<4),
     constraint nh_positive check(nro_habitacion >= 0)
 );
