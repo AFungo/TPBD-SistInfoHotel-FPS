@@ -31,12 +31,12 @@ insert into `persona` (`dni_persona`, `apellido`, `nombre`) values
 
 /*!40000 alter table `cliente` disable keys*/;
 insert into `cliente` (`dni_cliente`, `fecha_1ra_vez`) values
-(43189994, '14-05-2020'),
-(21437887, '02-11-2010'),
-(24150753, '21-01-2012'),
-(22943126, '29-08-2016'),
-(30214255, '17-06-2018'),
-(34148124, '23-09-2014');
+(43189994, '2020-05-14'),
+(21437887, '2010-11-02'),
+(24150753, '2012-01-21'),
+(22943126, '2016-08-29'),
+(30214255, '2018-06-17'),
+(34148124, '2014-09-23');
 /*!40000 alter table `cliente` enable keys*/;
 
 --
@@ -62,3 +62,93 @@ insert into `gerente` (`dni_gerente`, `fecha_ingreso`, `sueldo`) values
 (26013149, '06-10-2011', 127250.00),
 (19452983, '01-01-2010', 150630.00);
 /*!40000 alter table `gerente` enable keys*/;
+
+--
+--
+--
+
+/*!40000 alter table `comision` disable keys*/;
+insert into `comision` (`nro_comision`, `dni_gerente`, `monto`) values
+(325, 29934733, 457.00),
+(452, 26013149, 583.00),
+(124, 19452983, 704.00);
+/*!40000 alter table `comision` enable keys*/;
+
+--
+--
+--
+
+/*!40000 alter table `tipo_habitacion` disable keys*/;
+insert into `tipo_habitacion` (`cod_tipo`, `descripcion`, `costo`) values
+(001,'Es una habitacion economica que cumple con su objetivo.' , 2500),
+(002,'Es una habitacion con ambientes mas espaciosos y una mejor vista.' , 3500),
+(003,'Es una habitacion con algunos lujos extras.' , 4000),
+(004,'Es la habitacion con mejor vista, mejores lujos, mas espaciosa, la mejor.' , 5900);
+/*!40000 alter table `tipo_habitacion` enable keys*/;
+
+
+
+--
+--
+--
+
+/*!40000 alter table `habitacion` disable keys*/;
+insert into `habitacion` (`nro_habitacion`, `cant_camas`, `cod_tipo`) values
+(23, 2, 002),
+(18, 1, 001),
+(47, 3, 003),
+(5 , 1, 001),
+(32, 1, 001),
+(40, 4, 004);
+/*!40000 alter table `habitacion` enable keys*/;
+
+--
+--
+--
+
+/*!40000 alter table `atiende` disable keys*/;
+insert into `atiende` (`dni_mucama`, `nro_habitacion`) values
+(42788292,23),
+(34148124,18),
+(39102573,47),
+(31228919,5),
+(33578090,32),
+(31228919,40);
+/*!40000 alter table `atiende` enable keys*/;
+
+--
+--
+--
+
+/*!40000 alter table `fecha` disable keys*/;
+insert into `fecha` (`fecha`) values
+('2020-05-14'),
+('2010-11-02'),
+('2012-01-21'),
+('2016-08-29'),
+('2018-06-17'),
+('2019-07-12'),
+('2020-01-07'),
+('2013-09-25'),
+('2014-09-23');
+/*!40000 alter table `fecha` enable keys*/;
+
+--
+--
+--
+
+/*!40000 alter table `ocupada` disable keys*/;
+insert into `ocupada` (`nro_habitacion`,`fecha`, `dni_cliente`,`precio_noche`) values
+(23,'2020-05-14', 43189994, 3500),
+(18,'2010-11-02', 21437887, 2500),
+(47,'2012-01-21', 24150753, 4000),
+(5,'2016-08-29', 22943126, 2500),
+(32,'2018-06-17', 30214255, 2500),
+(23,'2019-07-12', 21437887, 3500),
+(47,'2020-01-07', 30214255, 4000),
+(18,'2013-09-25', 24150753, 2500),
+(40,'2014-09-23', 34148124, 5900);
+/*!40000 alter table `ocupada` enable keys*/;
+
+
+
