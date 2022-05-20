@@ -183,7 +183,7 @@ create table `ocupada`(
     constraint cd_positive check(cantid_dias > 0)
 );
 delimiter $$
-create trigger trigger_fecha_current_fecha
+create trigger trigger_fecha_current_ocupada
 	before insert on ocupada
 	for each row
 		begin
