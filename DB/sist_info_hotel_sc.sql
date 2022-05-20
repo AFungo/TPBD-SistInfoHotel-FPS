@@ -23,23 +23,56 @@ create table `persona`(
 drop table if exists `cliente`;
 create table `cliente`(
 	dni_cliente int not null primary key,
-    fecha_1ra_vez date not null,
+    fecha_1ra_vez date not null, -- previa a la fecha corriente
     constraint foreign key (dni_cliente) references persona (dni_persona)
 );
+
+delimiter $$
+create trigger trigger_fecha_current_cliente
+	before insert on cliente
+	for each row
+		begin
+            declare dni_varchar varchar(8);
+            declare output varchar(100);
+			set dni_varchar = new.dni_cliente;
+            set output = concat('Fecha invalida en cliente al insertar DNI: ', dni_varchar);
+            
+			if new.fecha_1ra_vez > curdate() then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
 
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.mucama`
 -- 
-SELECT CURDATE() AS Today;
+
 drop table if exists `mucama`;
 create table `mucama`(
 	dni_mucama int not null primary key,
     fecha_ingreso date not null, -- previa a la fecha corriente
-    sueldo float not null,-- positivo
+    sueldo float not null, -- positivo
     constraint foreign key (dni_mucama) references persona (dni_persona),
-    constraint sueldo_positive check(sueldo >= 0),
-    constraint fecha_current check (Today > fecha_ingreso)
+    constraint sueldo_mucama_positive check(sueldo >= 0)
 );
+
+delimiter $$
+create trigger trigger_fecha_current_mucama
+	before insert on mucama
+	for each row
+		begin
+            declare dni_varchar varchar(8);
+            declare output varchar(100);
+			set dni_varchar = new.dni_mucama;
+            set output = concat('Fecha invalida en mucama al insertar DNI: ', dni_varchar);
+            
+			if new.fecha_ingreso > curdate() then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
 
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.gerente`
@@ -51,8 +84,25 @@ create table `gerente`(
     fecha_ingreso date not null, -- previa a la fecha corriente
     sueldo float not null, -- positivo
     constraint foreign key (dni_gerente) references persona (dni_persona),
-    constraint sueldo_positive check(sueldo >= 0)
+    constraint sueldo_gerente_positive check(sueldo >= 0)
 );
+
+delimiter $$
+create trigger trigger_fecha_current_gerente
+	before insert on gerente
+	for each row
+		begin
+            declare dni_varchar varchar(8);
+            declare output varchar(100);
+			set dni_varchar = new.dni_gerente;
+            set output = concat('Fecha invalida en gerente al insertar DNI: ', dni_varchar);
+            
+			if new.fecha_ingreso > curdate() then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
 
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.comision`
@@ -60,7 +110,7 @@ create table `gerente`(
 
 drop table if exists `comision`;
 create table `comision`(
-	nro_comision int not null,
+	nro_comision int not null, -- positivo
 	dni_gerente int not null,
     monto float not null, -- positivo
     constraint foreign key (dni_gerente) references gerente (dni_gerente),
@@ -77,8 +127,8 @@ create table `tipo_habitacion`(
 	cod_tipo int not null primary key,
 	descripcion varchar(200) not null,
     costo float not null, -- positivo
-    constraint costo_positive check(costo>=0),
-    constraint ct_positive check(cod_tipo>=0)
+    constraint costo_positive check(costo >= 0),
+    constraint ct_positive check(cod_tipo >= 0)
 );
 
 -- 
@@ -90,8 +140,8 @@ create table `habitacion`(
 	nro_habitacion int not null primary key, -- positivo
 	cant_camas int not null, -- mayor que 0 menor que 3 habitaciones hasta triples
     cod_tipo int not null,
-    constraint foreign key (cod_tipo) references tipo_habitacion (cod_tipo).
-	constraint cant_camas_rest check(cant_camas>0), -- falta poner que tiene que ser >4
+    constraint foreign key (cod_tipo) references tipo_habitacion (cod_tipo),
+	constraint cant_camas_rest check(cant_camas > 0 and cant_camas < 4),
     constraint nh_positive check(nro_habitacion >= 0)
 );
 
@@ -114,8 +164,23 @@ create table `atiende`(
 
 drop table if exists `fecha`;
 create table `fecha`(
-	fecha date not null primary key
+	fecha_art date not null primary key -- previa a la fecha corriente
 );
+
+delimiter $$
+create trigger trigger_fecha_current_fecha
+	before insert on fecha
+	for each row
+		begin
+            declare output varchar(100);
+            set output = concat('Fecha invalida: ', fecha_art);
+            
+			if new.fecha_art > curdate() then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
 
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.ocupada`
@@ -124,12 +189,14 @@ create table `fecha`(
 drop table if exists `ocupada`;
 create table `ocupada`(
 	nro_habitacion int not null,
-    fecha date not null,
+    fecha_art date not null,
     dni_cliente int not null,
     precio_noche float not null,
+    cantid_dias int not null,
     constraint foreign key (nro_habitacion) references habitacion (nro_habitacion),
-    constraint foreign key (fecha) references fecha (fecha),
+    constraint foreign key (fecha_art) references fecha (fecha_art),
     constraint foreign key (dni_cliente) references cliente (dni_cliente),
-	constraint primary key (nro_habitacion, fecha),
-    constraint pn_positive check(precio_noche>0)
+	constraint primary key (nro_habitacion, fecha_art),
+    constraint pn_positive check(precio_noche > 0),
+    constraint cd_positive check(cantid_dias > 0)
 );
