@@ -45,6 +45,19 @@ create trigger trigger_fecha_current_cliente
 $$
 delimiter ;
 
+delimiter $$
+create trigger trigger_baja_cliente
+	before delete on cliente
+	for each row
+		begin
+			delete from ocupada where old.dni_cliente = ocupada.dni_cliente;
+            if old.dni_cliente != gerente.dni_gerente or old.dni_cliente != mucama.dni_mucama then
+				delete from persona where old.dni_cliente = persona.dni_persona;
+			end if;
+		end;
+$$
+delimiter ;
+
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.mucama`
 -- 
@@ -71,6 +84,19 @@ create trigger trigger_fecha_current_mucama
 			if new.fecha_ingreso > curdate() then
 				signal sqlstate '45000' set message_text = output;
             end if;
+		end;
+$$
+delimiter ;
+
+delimiter $$
+create trigger trigger_baja_mucama
+	before delete on mucama
+	for each row
+		begin
+			delete from atiende where old.dni_mucama = atiende.dni_mucama;
+			if old.dni_mucama != cliente.dni_cliente then
+				delete from persona where old.dni_mucama = persona.dni_persona;
+			end if;
 		end;
 $$
 delimiter ;
@@ -105,6 +131,19 @@ create trigger trigger_fecha_current_gerente
 $$
 delimiter ;
 
+delimiter $$
+create trigger trigger_baja_gerente
+	before delete on gerente
+	for each row
+		begin
+			delete from comision where old.dni_gerente = comision.dni_gerente;
+			if old.dni_gerente != cliente.dni_cliente then
+				delete from persona where old.dni_gerente = persona.dni_persona;
+			end if;
+		end;
+$$
+delimiter ;
+
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.comision`
 -- 
@@ -132,6 +171,16 @@ create table `tipo_habitacion`(
     constraint ct_positive check(cod_tipo >= 0)
 );
 
+delimiter $$
+create trigger trigger_baja_tipo_hab
+	before delete on tipo_habitacion
+	for each row
+		begin
+			delete from habitacion where old.cod_tipo = habitacion.cod_tipo;
+		end;
+$$
+delimiter ;
+
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.habitacion`
 -- 
@@ -145,6 +194,18 @@ create table `habitacion`(
 	constraint cant_camas_rest check(cant_camas > 0 and cant_camas < 4),
     constraint nh_positive check(nro_habitacion >= 0)
 );
+
+delimiter $$
+create trigger trigger_baja_habitacion
+	before delete on habitacion
+	for each row
+		begin
+			if old.nro_habitacion != ocupada.nro_habitacion then
+				delete from atiende where old.nro_habitacion = atiende.nro_habitacion;
+			end if;
+		end;
+$$
+delimiter ;
 
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.atiende`
