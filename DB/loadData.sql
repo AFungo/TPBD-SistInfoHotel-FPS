@@ -120,18 +120,6 @@ insert into `atiende` (`dni_mucama`, `nro_habitacion`) values
 -- Dumping data para la tabla `gestion_hotel_sc.fecha`
 -- 
 
-/*!40000 alter table `fecha` disable keys*/;
-insert into `fecha` (`fecha_art`) values
-('2020-05-14'),
-('2010-11-02'),
-('2012-01-21'),
-('2016-08-29'),
-('2018-06-17'),
-('2019-07-12'),
-('2020-01-07'),
-('2013-09-25'),
-('2014-09-23');
-/*!40000 alter table `fecha` enable keys*/;
 
 -- 
 -- Dumping data para la tabla `gestion_hotel_sc.ocupada`

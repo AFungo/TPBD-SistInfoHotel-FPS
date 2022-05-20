@@ -13,7 +13,8 @@ drop table if exists `persona`;
 create table `persona`(
 	dni_persona int(10) not null primary key,
     nombre varchar(40) not null,
-    apellido varchar(40) not null
+    apellido varchar(40) not null,
+    constraint valid_dni check (dni_persona > 0)
 );
 
 -- 
@@ -162,25 +163,7 @@ create table `atiende`(
 -- Estructura de la tabla `gestion_hotel_sc.fecha`
 -- 
 
-drop table if exists `fecha`;
-create table `fecha`(
-	fecha_art date not null primary key -- previa a la fecha corriente
-);
 
-delimiter $$
-create trigger trigger_fecha_current_fecha
-	before insert on fecha
-	for each row
-		begin
-            declare output varchar(100);
-            set output = concat('Fecha invalida: ', fecha_art);
-            
-			if new.fecha_art > curdate() then
-				signal sqlstate '45000' set message_text = output;
-            end if;
-		end;
-$$
-delimiter ;
 
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.ocupada`
@@ -194,9 +177,22 @@ create table `ocupada`(
     precio_noche float not null,
     cantid_dias int not null,
     constraint foreign key (nro_habitacion) references habitacion (nro_habitacion),
-    constraint foreign key (fecha_art) references fecha (fecha_art),
     constraint foreign key (dni_cliente) references cliente (dni_cliente),
 	constraint primary key (nro_habitacion, fecha_art),
     constraint pn_positive check(precio_noche > 0),
     constraint cd_positive check(cantid_dias > 0)
 );
+delimiter $$
+create trigger trigger_fecha_current_fecha
+	before insert on ocupada
+	for each row
+		begin
+            declare output varchar(100);
+            set output = concat('Fecha invalida: ', new.fecha_art);
+            
+			if new.fecha_art > curdate() then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
