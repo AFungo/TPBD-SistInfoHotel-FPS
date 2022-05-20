@@ -121,7 +121,7 @@ insert into `atiende` (`dni_mucama`, `nro_habitacion`) values
 -- 
 
 /*!40000 alter table `fecha` disable keys*/;
-insert into `fecha` (`fecha`) values
+insert into `fecha` (`fecha_art`) values
 ('2020-05-14'),
 ('2010-11-02'),
 ('2012-01-21'),
@@ -138,7 +138,7 @@ insert into `fecha` (`fecha`) values
 -- 
 
 /*!40000 alter table `ocupada` disable keys*/;
-insert into `ocupada` (`nro_habitacion`, `fecha`, `dni_cliente`, `precio_noche`, `cantid_dias`) values
+insert into `ocupada` (`nro_habitacion`, `fecha_art`, `dni_cliente`, `precio_noche`, `cantid_dias`) values
 (23, '2020-05-14', 43189994, 3500.00, 5),
 (18, '2010-11-02', 21437887, 2500.00, 1),
 (47, '2012-01-21', 24150753, 4000.00, 4),

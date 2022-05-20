@@ -33,11 +33,11 @@ create trigger trigger_fecha_current_cliente
 	for each row
 		begin
             declare dni_varchar varchar(8);
-            declare output varchar(50);
+            declare output varchar(100);
 			set dni_varchar = new.dni_cliente;
             set output = concat('Fecha invalida en cliente al insertar DNI: ', dni_varchar);
             
-			if new.fecha_ingreso > curdate() then
+			if new.fecha_1ra_vez > curdate() then
 				signal sqlstate '45000' set message_text = output;
             end if;
 		end;
@@ -63,7 +63,7 @@ create trigger trigger_fecha_current_mucama
 	for each row
 		begin
             declare dni_varchar varchar(8);
-            declare output varchar(50);
+            declare output varchar(100);
 			set dni_varchar = new.dni_mucama;
             set output = concat('Fecha invalida en mucama al insertar DNI: ', dni_varchar);
             
@@ -93,7 +93,7 @@ create trigger trigger_fecha_current_gerente
 	for each row
 		begin
             declare dni_varchar varchar(8);
-            declare output varchar(50);
+            declare output varchar(100);
 			set dni_varchar = new.dni_gerente;
             set output = concat('Fecha invalida en gerente al insertar DNI: ', dni_varchar);
             
@@ -164,7 +164,7 @@ create table `atiende`(
 
 drop table if exists `fecha`;
 create table `fecha`(
-	fecha date not null primary key -- previa a la fecha corriente
+	fecha_art date not null primary key -- previa a la fecha corriente
 );
 
 delimiter $$
@@ -172,10 +172,10 @@ create trigger trigger_fecha_current_fecha
 	before insert on fecha
 	for each row
 		begin
-            declare output varchar(50);
-            set output = concat('Fecha invalida: ', fecha);
+            declare output varchar(100);
+            set output = concat('Fecha invalida: ', fecha_art);
             
-			if new.fecha > curdate() then
+			if new.fecha_art > curdate() then
 				signal sqlstate '45000' set message_text = output;
             end if;
 		end;
@@ -189,14 +189,14 @@ delimiter ;
 drop table if exists `ocupada`;
 create table `ocupada`(
 	nro_habitacion int not null,
-    fecha date not null,
+    fecha_art date not null,
     dni_cliente int not null,
     precio_noche float not null,
     cantid_dias int not null,
     constraint foreign key (nro_habitacion) references habitacion (nro_habitacion),
-    constraint foreign key (fecha) references fecha (fecha),
+    constraint foreign key (fecha_art) references fecha (fecha_art),
     constraint foreign key (dni_cliente) references cliente (dni_cliente),
-	constraint primary key (nro_habitacion, fecha),
+	constraint primary key (nro_habitacion, fecha_art),
     constraint pn_positive check(precio_noche > 0),
     constraint cd_positive check(cantid_dias > 0)
 );
