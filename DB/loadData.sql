@@ -99,7 +99,7 @@ insert into `habitacion` (`nro_habitacion`, `cant_camas`, `cod_tipo`) values
 (47, 3, 003),
 (5 , 1, 001),
 (32, 1, 001),
-(40, 4, 002);
+(40, 2, 002);
 /*!40000 alter table `habitacion` enable keys*/;
 
 -- 
