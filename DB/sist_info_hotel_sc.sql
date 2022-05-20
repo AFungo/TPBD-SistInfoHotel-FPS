@@ -11,7 +11,7 @@ use gestion_hotel_sc;
 
 drop table if exists `persona`;
 create table `persona`(
-	dni_persona int not null primary key,
+	dni_persona int(10) not null primary key,
     nombre varchar(40) not null,
     apellido varchar(40) not null
 );
