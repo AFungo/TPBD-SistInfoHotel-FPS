@@ -1,0 +1,8 @@
+
+1- Pararse en la misma carpeta de SistInfoHotel.java
+
+2-//Compilar
+	javac -cp .:mysql-connector-java-8.0.20.jar SistInfoHotel.java 
+
+3-//Ejecutar
+	java -cp .:mysql-connector-java-8.0.20.jar SistInfoHotel
