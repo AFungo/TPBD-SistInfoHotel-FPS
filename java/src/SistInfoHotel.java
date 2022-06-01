@@ -1,9 +1,12 @@
 
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.*;
 
 public class SistInfoHotel{
+  private static Connection connection;
   public static void main(String[] args){
+    
     try {
       String driver = "com.mysql.cj.jdbc.Driver";
       String url = "jdbc:mysql://localhost:3306/gestion_hotel_sc?serverTimezone=UTC";
@@ -13,7 +16,7 @@ public class SistInfoHotel{
       // Load database driver if not already loaded.
       Class.forName(driver);
       // Establish network connection to database.
-      Connection connection =
+      connection =
       DriverManager.getConnection(url, username, password);
       addNewClient(connection);
     }catch(ClassNotFoundException cnfe) {
@@ -27,6 +30,31 @@ public class SistInfoHotel{
       System.err.println("Error connecting: " + sqle);
     }
 
+  }
+  private static void logicView(){
+    try{
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      
+      boolean exit = false;
+      view();
+      while(!exit){
+        String sTexto = br.readLine();
+        switch(sTexto){
+          case "0": addNewClient(connection);
+                  break;
+          case "1": addNewRoom(connection);
+                  break;
+          case "2": viewRoomHistory(connection);
+                  break;
+          case "9": exit = true;
+                  break;
+          default: break;
+        }
+      }
+  }catch(Exception e) {
+    System.err.println("ERROR" + e);  
+  }
   }
   private static boolean addNewClient(Connection connection){
     // para trabajar con transacciones
@@ -54,5 +82,11 @@ public class SistInfoHotel{
       System.err.println("Ups!! algos salio mal :/ " + sqle);
     }
     return false;
+  }
+  private static boolean addNewRoom(Connection connection){
+    throw new IllegalStateException("metodo no implementado");
+  }
+  private static boolean viewRoomHistory(Connection connection){
+    throw new IllegalAccessError("Falta implenetar");
   }
 }
