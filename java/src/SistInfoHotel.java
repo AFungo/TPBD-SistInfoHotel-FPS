@@ -11,9 +11,6 @@ public class SistInfoHotel{
   public static void main(String[] args){
     createConnection();
     logicView();//addNewClient(connection);
-    
-   
-
   }
 
 
@@ -80,29 +77,46 @@ public class SistInfoHotel{
   }
 
   private static boolean addNewClient(Connection connection){
-    // para trabajar con transacciones
     try{
-      connection.setAutoCommit(false); 
-      String query = "insert into cliente (dni_cliente,fecha_1ra_vez) values(?,?)";
-
-      PreparedStatement statement = connection.prepareStatement(query);
-      // Send query to database and store results.
-      /*try
-        {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        String sTexto = br.readLine();
-        System.out.println(sTexto);
+      String name = "";
+      String surname = "";
+      String dni = "";
+      String firstTimeDate = "";
+      try{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//declarar lector para la consola
+        System.out.println("---Complete los datos personales del cliente---");
+        System.out.print("Nombre: ");
+        name = br.readLine();//devuelve lo ingresado por consola
+        System.out.print("Apellido: ");
+        surname = br.readLine();
+        System.out.print("DNI: ");
+        dni = br.readLine();
+        System.out.println("---Ingrese la fecha del primer alojamiento---");
+        System.out.println("El formato de la fecha es  AA-MM-DD");
+        System.out.print("Fecha: ");
+        firstTimeDate = br.readLine();
       } catch(Exception e) {
-      }*/
-      statement.setString(1,"42788292");
-      statement.setString(2,Date.valueOf("1783-05-31").toString());
+        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");
+      }
+      connection.setAutoCommit(false);
+      //añadir una nueva persona a la base de datos
+      String query = "insert into persona (dni_persona,nombre,apellido) values(?,?,?)";//tener en cuenta q values(?,?,..,?) segun cuantos atributos cargues
+      PreparedStatement statement = connection.prepareStatement(query);
+      statement.setString(1,dni);//los values empiezan de 1y matchean con el orden del insert
+      statement.setString(2,name);
+      statement.setString(3,surname);
+      statement.executeUpdate();
+
+      query = "insert into cliente (dni_cliente,fecha_1ra_vez) values(?,?)";
+      statement = connection.prepareStatement(query);
+      statement.setString(1,dni);
+      statement.setString(2,firstTimeDate);
       statement.executeUpdate();
       // cierro la transaccion
       connection.commit();
       return true;             
     }catch(Exception sqle){
-      System.err.println("Ups!! algos salio mal :/ " + sqle);
+      System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
     }
     return false;
   }
