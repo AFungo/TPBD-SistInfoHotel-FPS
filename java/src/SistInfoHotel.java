@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
@@ -18,7 +17,7 @@ public class SistInfoHotel{
       // Establish network connection to database.
       connection =
       DriverManager.getConnection(url, username, password);
-      addNewClient(connection);
+      logicView();//addNewClient(connection);
     }catch(ClassNotFoundException cnfe) {
       System.err.println("Error loading driver: " + cnfe);
       cnfe.printStackTrace();
@@ -56,6 +55,15 @@ public class SistInfoHotel{
     System.err.println("ERROR" + e);  
   }
   }
+  private static void view(){
+    System.out.println("Sistema de informacion Hotelera");
+    System.out.println("0- Añadir cliente");
+    System.out.println("1- Añadir habitacion");
+    System.out.println("2- Ver historial de la habitacion");
+    System.out.println("9- Salir");
+    System.out.println("Opcion");
+  }
+
   private static boolean addNewClient(Connection connection){
     // para trabajar con transacciones
     try{
