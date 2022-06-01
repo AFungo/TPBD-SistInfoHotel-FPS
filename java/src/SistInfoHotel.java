@@ -4,8 +4,21 @@ import java.sql.*;
 
 public class SistInfoHotel{
   private static Connection connection;
+
+
+
+
   public static void main(String[] args){
+    createConnection();
+    logicView();//addNewClient(connection);
     
+   
+
+  }
+
+
+
+  private static void createConnection(){
     try {
       String driver = "com.mysql.cj.jdbc.Driver";
       String url = "jdbc:mysql://localhost:3306/gestion_hotel_sc?serverTimezone=UTC";
@@ -15,9 +28,7 @@ public class SistInfoHotel{
       // Load database driver if not already loaded.
       Class.forName(driver);
       // Establish network connection to database.
-      connection =
-      DriverManager.getConnection(url, username, password);
-      logicView();//addNewClient(connection);
+      connection = DriverManager.getConnection(url, username, password);
     }catch(ClassNotFoundException cnfe) {
       System.err.println("Error loading driver: " + cnfe);
       cnfe.printStackTrace();
@@ -28,16 +39,18 @@ public class SistInfoHotel{
   	  sqle.printStackTrace();
       System.err.println("Error connecting: " + sqle);
     }
-
   }
+
+
   private static void logicView(){
     try{
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
       
       boolean exit = false;
-      view();
+
       while(!exit){
+        view();
         String sTexto = br.readLine();
         switch(sTexto){
           case "0": addNewClient(connection);
@@ -55,6 +68,8 @@ public class SistInfoHotel{
     System.err.println("ERROR" + e);  
   }
   }
+
+
   private static void view(){
     System.out.println("Sistema de informacion Hotelera");
     System.out.println("0- Añadir cliente");
