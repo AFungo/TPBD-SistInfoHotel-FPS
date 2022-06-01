@@ -6,3 +6,6 @@
 
 3-//Ejecutar
 	java -cp .:mysql-connector-java-8.0.20.jar SistInfoHotel
+
+//Entrar consola de mysql
+mysql -h localhost -u root -p
