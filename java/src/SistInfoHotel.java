@@ -176,6 +176,34 @@ public class SistInfoHotel{
   
   }
   private static boolean viewRoomHistory(Connection connection){
-    throw new IllegalAccessError("Falta implenetar");
+    String nro_hab = "";
+    try{
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//declarar lector para la consola
+      System.out.println("\n---Ingrese el numero de habitacion---");
+      System.out.print("Numero habitacion: ");
+      nro_hab = br.readLine();//devuelve lo ingresado por consola
+    }catch(Exception e) {
+      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");
+    }
+    
+    
+    try{
+      String query = "select * from cliente cli inner join persona pe on (cli.dni_cliente = pe.dni_persona) inner join ocupada oc on (oc.dni_cliente = cli.dni_cliente and oc.nro_habitacion =" + nro_hab + ")";
+      PreparedStatement statement = connection.prepareStatement(query);
+      ResultSet resultSet = statement.executeQuery();
+      System.out.println("\n \n Registro historico de la habitacion " + nro_hab);
+      System.out.println("Nombre  |  Apellido  |  DNI  |  Fecha");
+      while(resultSet.next()){
+        System.out.print(resultSet.getString("nombre")+ "  |");
+        System.out.print(resultSet.getString("apellido")+ "  |");
+        System.out.print(resultSet.getString("dni_cliente")+ "  |");
+        System.out.println(resultSet.getString("fecha_ocup"));
+      }
+      System.out.println("\n\n");
+      return true;
+    }catch(Exception e){
+      System.err.println("Ups!! algos salio mal :/ " + e);     
+    }
+    return false;
   }
 }
