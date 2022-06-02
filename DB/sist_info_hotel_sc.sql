@@ -28,6 +28,23 @@ create table `persona`(
     constraint valid_dni check (dni_persona > 0)
 );
 
+delimiter $$
+create trigger trigger_fecha_nac_persona
+	before insert on persona
+	for each row
+		begin
+            declare dni_varchar varchar(8);
+            declare output varchar(100);
+			set dni_varchar = new.dni_persona;
+            set output = concat('Fecha invalida al insertar DNI: ', dni_varchar, '. Debe ser Mayor de Edad');
+            
+			if new.fecha_nac >= date_sub(curdate(), interval 18 year) then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
+
 -- 
 -- Estructura de la tabla `gestion_hotel_sc.cliente`
 -- 
