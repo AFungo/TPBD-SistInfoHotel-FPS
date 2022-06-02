@@ -2,27 +2,38 @@
 -- Dumping data para la tabla `gestion_hotel_sc.persona`
 --
 
+-- truncate table atiende;	-- dni_m cf mucama  nro_hab cf habitacion
+-- truncate table modificaciones_ocupada;	-- nro_hab cf habitacion  dni_cli cf cliente
+-- truncate table ocupada;	-- nro_hab cf habitacion  dni_cli cf cliente
+-- truncate table habitacion;	-- cod_tipo cf tipo_hab
+-- truncate table tipo_habitacion;
+-- truncate table comision;	-- dni_g cf gerente
+-- truncate table gerente;	-- dni_g cf persona
+-- truncate table mucama;	-- dni_m cf persona
+-- truncate table cliente;	-- dni_c cf persona
+-- truncate table persona;
+
 /*!40000 alter table `persona` disable keys*/;
-insert into `persona` (`dni_persona`, `apellido`, `nombre`) values
-(43189994, 'SUAREZ', 'MATEO'),
-(43433129, 'ARIAS SCHIAVI', 'JUAN PABLO'),
-(30214255, 'BARALE', 'MAYCO'),
-(22943126, 'BETTIOL', 'NICOLAS MATIAS'),
-(37263176, 'BONO', 'FEDERICO'),
-(26013149, 'CABRAL', 'HERNAN'),
-(34148124, 'CAMPAGNA', 'JULIETA'),
-(41221496, 'CAMPOS', 'GONZALO'),
-(31228919, 'CARDETTI', 'SILVINA'),
-(19452983, 'CARRENO', 'GERMAN'),
-(24150753, 'CASTELLI', 'JESUS'),
-(42119854, 'CASTELLINA', 'FRANCO'),
-(35253256, 'CHIOTTA', 'FRANCISCO'),
-(33578090, 'DOMINGUEZ', 'ELIANA'),
-(29934733, 'TURLETTI', 'LUCAS'),
-(21437887, 'PAUTASSO', 'MATIAS'),
-(40124612, 'ONTIVERO', 'MARIANO'),
-(42788292, 'FERREYRA', 'LUDMILA'),
-(39102573, 'BELTRAME', 'PAULA');
+insert into `persona` (`dni_persona`, `apellido`, `nombre`, `fecha_nac`) values
+(43189994, 'SUAREZ', 'MATEO', '2001-05-14'),
+(43433129, 'ARIAS SCHIAVI', 'JUAN PABLO', '2000-11-23'),
+(30214255, 'BARALE', 'MAYCO', '1996-01-04'),
+(22943126, 'BETTIOL', 'NICOLAS MATIAS', '1980-05-10'),
+(37263176, 'BONO', 'FEDERICO', '1998-07-30'),
+(26013149, 'CABRAL', 'HERNAN', '1960-09-26'),
+(34148124, 'CAMPAGNA', 'JULIETA', '1976-12-02'),
+(41221496, 'CAMPOS', 'GONZALO', '1999-10-06'),
+(31228919, 'CARDETTI', 'SILVINA', '2020-05-14'),
+(19452983, 'CARRENO', 'GERMAN', '1950-04-23'),
+(24150753, 'CASTELLI', 'JESUS', '1974-03-16'),
+(42119854, 'CASTELLINA', 'FRANCO', '2000-05-17'),
+(35253256, 'CHIOTTA', 'FRANCISCO', '1992-12-14'),
+(33578090, 'DOMINGUEZ', 'ELIANA', '1990-01-10'),
+(29934733, 'TURLETTI', 'LUCAS', '1983-05-14'),
+(21437887, 'PAUTASSO', 'MATIAS', '1968-04-28'),
+(40124612, 'ONTIVERO', 'MARIANO', '1994-05-24'),
+(42788292, 'FERREYRA', 'LUDMILA', '2000-07-17'),
+(39102573, 'BELTRAME', 'PAULA', '1992-11-29');
 /*!40000 alter table `persona` enable keys*/;
 
 --
@@ -32,6 +43,7 @@ insert into `persona` (`dni_persona`, `apellido`, `nombre`) values
 /*!40000 alter table `cliente` disable keys*/;
 insert into `cliente` (`dni_cliente`, `fecha_1ra_vez`) values
 (43189994, '2020-05-14'),
+(29934733, '2013-04-23'),
 (21437887, '2010-11-02'),
 (24150753, '2012-01-21'),
 (22943126, '2016-08-29'),
@@ -86,8 +98,6 @@ insert into `tipo_habitacion` (`cod_tipo`, `descripcion`, `costo`) values
 (004, 'Es la habitacion con mejor vista, mejores lujos, mas espaciosa, la mejor.', 5900);
 /*!40000 alter table `tipo_habitacion` enable keys*/;
 
-
-
 -- 
 -- Dumping data para la tabla `gestion_hotel_sc.habitacion`
 -- 
@@ -96,6 +106,7 @@ insert into `tipo_habitacion` (`cod_tipo`, `descripcion`, `costo`) values
 insert into `habitacion` (`nro_habitacion`, `cant_camas`, `cod_tipo`) values
 (23, 2, 002),
 (18, 1, 001),
+(21, 1, 001),
 (47, 3, 003),
 (5 , 1, 001),
 (32, 1, 001),
@@ -117,16 +128,11 @@ insert into `atiende` (`dni_mucama`, `nro_habitacion`) values
 /*!40000 alter table `atiende` enable keys*/;
 
 -- 
--- Dumping data para la tabla `gestion_hotel_sc.fecha`
--- 
-
-
--- 
 -- Dumping data para la tabla `gestion_hotel_sc.ocupada`
 -- 
 
 /*!40000 alter table `ocupada` disable keys*/;
-insert into `ocupada` (`nro_habitacion`, `fecha_art`, `dni_cliente`, `precio_noche`, `cantid_dias`) values
+insert into `ocupada` (`nro_habitacion`, `fecha_ocup`, `dni_cliente`, `precio_noche`, `cant_dias`) values
 (23, '2020-05-14', 43189994, 3500.00, 5),
 (18, '2010-11-02', 21437887, 2500.00, 1),
 (47, '2012-01-21', 24150753, 4000.00, 4),
