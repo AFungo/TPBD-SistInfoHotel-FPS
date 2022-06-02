@@ -124,8 +124,13 @@ public class SistInfoHotel{
         System.out.println("\n");
       }
       return true;             
-    }catch(Exception sqle){
-      System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
+    }catch(SQLException sqle){
+      try{
+        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
+        connection.rollback();
+      }catch(Exception e){
+        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");  
+      }
     }
     return false;
   }
@@ -169,8 +174,13 @@ public class SistInfoHotel{
         System.out.println("\n");
       }
       return true;             
-    }catch(Exception sqle){
-      System.err.println("Ups!! algos salio mal :/ " + sqle);
+    }catch(SQLException sqle){
+      try{
+        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
+        connection.rollback();
+      }catch(Exception e){
+        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");  
+      }
     }
     return false;
   
@@ -201,7 +211,7 @@ public class SistInfoHotel{
       }
       System.out.println("\n\n");
       return true;
-    }catch(Exception e){
+    }catch(SQLException e){
       System.err.println("Ups!! algos salio mal :/ " + e);     
     }
     return false;
