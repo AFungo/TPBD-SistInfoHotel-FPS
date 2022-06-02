@@ -112,9 +112,17 @@ public class SistInfoHotel{
       statement.setString(3,surname);
       statement.setString(4, birthDate);
       statement.executeUpdate();
-
-      query = "insert into cliente (dni_cliente,fecha_1ra_vez) values(?,?)";
-      statement = connection.prepareStatement(query);
+    }catch(SQLException sqle){
+      try{
+        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
+        connection.rollback();
+      }catch(Exception e){
+        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");  
+      }
+    }
+    try{
+      String query = "insert into cliente (dni_cliente,fecha_1ra_vez) values(?,?)";
+      PreparedStatement statement = connection.prepareStatement(query);
       statement.setString(1,dni);
       statement.setString(2,firstTimeDate);
       statement.executeUpdate();
