@@ -107,7 +107,33 @@ public class SistInfoHotel{
     return false;
   }
   private static boolean addNewRoom(Connection connection){
-    throw new IllegalStateException("metodo no implementado");
+    // para trabajar con transacciones
+    try{
+      connection.setAutoCommit(false); 
+      String query = "insert into habitacion (nro_habitacion, cant_camas, cod_tipo) values(?,?,?)";
+
+      PreparedStatement statement = connection.prepareStatement(query);
+      // Send query to database and store results.
+      /*try
+        {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        String sTexto = br.readLine();
+        System.out.println(sTexto);
+      } catch(Exception e) {
+      }*/
+      statement.setString(1,"99");
+      statement.setString(2,Date.valueOf("2").toString());
+      statement.setString(3,Date.valueOf("002").toString());
+      statement.executeUpdate();
+      // cierro la transaccion
+      connection.commit();
+      return true;             
+    }catch(Exception sqle){
+      System.err.println("Ups!! algos salio mal :/ " + sqle);
+    }
+    return false;
+  
   }
   private static boolean viewRoomHistory(Connection connection){
     throw new IllegalAccessError("Falta implenetar");
