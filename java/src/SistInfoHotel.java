@@ -14,7 +14,9 @@ public class SistInfoHotel{
   }
 
 
-
+/**
+ * Este metodo establece una coneccion con la base datos.
+ */
   private static void createConnection(){
     try {
       String driver = "com.mysql.cj.jdbc.Driver";
@@ -38,10 +40,12 @@ public class SistInfoHotel{
     }
   }
 
-
+/* 
+ * Este metodo lee la opcion escrita por terminal y ejecuta el metodo correspondiente.
+ */
   private static void logicView(){
     try{
-      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
 
       
       boolean exit = false;
@@ -54,8 +58,11 @@ public class SistInfoHotel{
                   break;
           case "1": if(addNewRoom(connection)) System.out.println("---Habitacion añadida correctamente---\n");
                   break;
-          case "2": viewRoomHistory(connection);
-                  break;
+          case "2": addClientInRoom(connection);
+          break;
+
+          case "3": if(viewRoomHistory(connection)) System.out.println("---Alojamiento cargado correctamente---\n") ;
+          break;
           case "9": exit = true;
                   break;
           default: break;
@@ -66,22 +73,29 @@ public class SistInfoHotel{
   }
   }
 
-
+/*
+ * Menu visual.
+ */
   private static void view(){
     System.out.println("Sistema de informacion Hotelera");
     System.out.println("0- Añadir cliente");
     System.out.println("1- Añadir habitacion");
-    System.out.println("2- Ver historial de la habitacion");
+    System.out.println("2- Añadir alojamiento");
+    System.out.println("3- Ver historial de la habitacion");
     System.out.println("9- Salir");
-    System.out.println("Opcion");
+    System.out.print("Opcion: ");
   }
-
+/*
+ * Es un metodo que agrega un nuevo cliente a la base de datos
+ */
   private static boolean addNewClient(Connection connection){
     String name = "";
     String surname = "";
     String dni = "";
     String birthDate = "";
     String firstTimeDate = "";
+
+    //Pide los datos por consola
     try{
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//declarar lector para la consola
       System.out.println("---Complete los datos personales del cliente---");
@@ -100,8 +114,9 @@ public class SistInfoHotel{
       System.out.print("Fecha: ");
       firstTimeDate = br.readLine();
     } catch(Exception e) {
-      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");
+      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------\n");
     }
+    //carga la base de datos
     try{
       connection.setAutoCommit(false);
       //añadir una nueva persona a la base de datos
@@ -112,41 +127,41 @@ public class SistInfoHotel{
       statement.setString(3,surname);
       statement.setString(4, birthDate);
       statement.executeUpdate();
-    }catch(SQLException sqle){
-      try{
-        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
-        connection.rollback();
-      }catch(Exception e){
-        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");  
-      }
-    }
-    try{
-      String query = "insert into cliente (dni_cliente,fecha_1ra_vez) values(?,?)";
-      PreparedStatement statement = connection.prepareStatement(query);
+    
+      query = "insert into cliente (dni_cliente,fecha_1ra_vez) values(?,?)";
+      statement = connection.prepareStatement(query);
       statement.setString(1,dni);
       statement.setString(2,firstTimeDate);
       statement.executeUpdate();
       // cierro la transaccion
       connection.commit();
+      
+      //Para limpiar la consola
       for (int i = 0; i < 15; i++) {
         System.out.println("\n");
       }
+
       return true;             
     }catch(SQLException sqle){
       try{
-        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
+        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------\n");
         connection.rollback();
       }catch(Exception e){
-        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");  
+        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------\n");  
       }
     }
     return false;
   }
+
+/*
+ * Metodo que añade una nueva habitacion a la base de datos
+ */
   private static boolean addNewRoom(Connection connection){
     // para trabajar con transacciones
     String nro_hab = "";
     String cant_camas = "";
     String cod_tipo = "";
+    //Pide los datos por consola
     try{
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//declarar lector para la consola
       System.out.println("---Complete los datos de la habitacion---");
@@ -164,8 +179,10 @@ public class SistInfoHotel{
       System.out.print("Codigo del tipo: ");
       cod_tipo = br.readLine();
      } catch(Exception e) {
-      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");
+      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------\n");
     }
+
+    //se cargan los datos obtenidos a la base de datos
     try{
       connection.setAutoCommit(false); 
       String query = "insert into habitacion (nro_habitacion, cant_camas, cod_tipo) values(?,?,?)";
@@ -184,27 +201,92 @@ public class SistInfoHotel{
       return true;             
     }catch(SQLException sqle){
       try{
-        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------");
+        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------\n");
         connection.rollback();
       }catch(Exception e){
-        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");  
+        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------\n");  
       }
     }
     return false;
   
   }
+
+  /*
+   * añade un alojamiento de un cliente a una habitacion en una fecha determinada
+   */
+  private static boolean addClientInRoom(Connection connection){
+    String dni_cli = "";
+    String nro_hab = "";
+    String fecha_oc = "";
+    String pre_n = "";
+    String cant_d = "";
+
+    //pide los datos por consola
+    try{
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//declarar lector para la consola
+      System.out.println("---Ingrese los datos de la estadia---");
+      System.out.print("DNI cliente: ");
+      dni_cli = br.readLine();//devuelve lo ingresado por consola
+      System.out.print("Nro habitacion: ");
+      nro_hab = br.readLine();
+      System.out.println("-Fecha en la que se alojo-");
+      System.out.println("El formato de la fecha es  AA-MM-DD");
+      System.out.print("Fecha: ");
+      fecha_oc = br.readLine();
+      System.out.print("Cantiad de dias: ");
+      cant_d = br.readLine();
+      System.out.print("Precio por noche: ");
+      pre_n = br.readLine();
+    } catch(Exception e) {
+      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------\n");
+    }
+
+    //carga los datos a la base de datos
+    try{
+      connection.setAutoCommit(false); 
+      String query = "insert into ocupada (dni_cliente, nro_habitacion, fecha_ocup, precio_noche, cant_dias) values(?,?,?,?,?)";
+
+      PreparedStatement statement = connection.prepareStatement(query);
+      
+      statement.setString(1,dni_cli);
+      statement.setString(2, nro_hab);
+      statement.setString(3,fecha_oc);
+      statement.setString(4,pre_n);
+      statement.setString(5,cant_d);
+      statement.executeUpdate();
+      // cierro la transaccion
+      connection.commit();
+      for (int i = 0; i < 15; i++) {
+        System.out.println("\n");
+      }
+      return true;             
+    }catch(SQLException sqle){
+      try{
+        System.err.println("\n Ups algo salio mal :/ \n" + "--------- \n" + sqle + "\n---------\n");
+        connection.rollback();
+      }catch(Exception e){
+        System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------\n");  
+      }
+    }
+    return false;
+  }
+
+  /*
+   * Muestra los datos de alojamiento de una habitacion en especifico
+   */
   private static boolean viewRoomHistory(Connection connection){
     String nro_hab = "";
+    //pide los datos por consola
     try{
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//declarar lector para la consola
       System.out.println("\n---Ingrese el numero de habitacion---");
       System.out.print("Numero habitacion: ");
       nro_hab = br.readLine();//devuelve lo ingresado por consola
     }catch(Exception e) {
-      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------");
+      System.err.println("\n ERROR \n" + "--------- \n" + e + "\n ---------\n");
     }
     
-    
+    //consulta a la base de datos y da por salidala info obtenida
     try{
       String query = "select * from cliente cli inner join persona pe on (cli.dni_cliente = pe.dni_persona) inner join ocupada oc on (oc.dni_cliente = cli.dni_cliente and oc.nro_habitacion =" + nro_hab + ")";
       PreparedStatement statement = connection.prepareStatement(query);
@@ -220,7 +302,7 @@ public class SistInfoHotel{
       System.out.println("\n\n");
       return true;
     }catch(SQLException e){
-      System.err.println("Ups!! algos salio mal :/ " + e);     
+      System.err.println("Ups!! algos salio mal :/ " + e + "\n");     
     }
     return false;
   }
