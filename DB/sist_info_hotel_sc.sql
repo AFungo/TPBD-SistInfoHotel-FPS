@@ -152,7 +152,7 @@ create table `tipo_habitacion`(
 	descripcion varchar(200) not null,
     costo float not null, -- positivo
     constraint costo_positive check(costo >= 0),
-    constraint ct_positive check(cod_tipo >= 0)
+    constraint ct_positive check(cod_tipo >= 1 and cod_tipo <= 4)
 );
 
 -- 
@@ -206,6 +206,43 @@ create trigger trigger_fecha_current_ocupada
             set output = concat('Fecha invalida: ', new.fecha_ocup);
             
 			if new.fecha_ocup > curdate() then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
+
+delimiter $$
+create trigger trigger_cliente_ocupa_1_hab
+	before insert on ocupada
+	for each row
+		begin
+            declare dni_varchar varchar(8);
+            declare output varchar(100);
+			set dni_varchar = new.dni_cliente;
+            set output = concat('El cliente con DNI: ', dni_varchar, ' no puede ser registrado en mas de una habitacion el mismo dia');
+            
+			if new.nro_habitacion != (select nro_habitacion from ocupada oc where new.dni_cliente = oc.dni_cliente and new.fecha_ocup = oc.fecha_ocup) then
+				signal sqlstate '45000' set message_text = output;
+            end if;
+		end;
+$$
+delimiter ;
+
+-- Este trigger actualmente no funciona
+delimiter $$
+create trigger trigger_clientes_al_mismo_tiempo_misma_hab
+	before insert on ocupada
+	for each row
+		begin
+            declare output varchar(100);
+            declare cant_dias int;
+            declare fecha_ocup date;
+            set cant_dias = (select cant_dias from ocupada oc where new.nro_habitacion = oc.nro_habitacion order by fecha_ocup desc limit 1);
+            set fecha_ocup = (select fecha_ocup from ocupada oc where new.nro_habitacion = oc.nro_habitacion order by fecha_ocup desc limit 1);
+            set output = concat('Habitacion ocupada. La habitacion nro ', new.nro_habitacion,' estara libre desde: ', fecha_ocup);
+            
+			if new.fecha_ocup < date_add(fecha_ocup, interval cant_dias day) then
 				signal sqlstate '45000' set message_text = output;
             end if;
 		end;
