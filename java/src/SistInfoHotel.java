@@ -58,7 +58,7 @@ public class SistInfoHotel{
                   break;
           case "1": if(addNewRoom(connection)) System.out.println("---Habitacion añadida correctamente---\n");
                   break;
-          case "2": addClientInRoom(connection);
+          case "2": if(addClientInRoom(connection)) System.out.println("---Alojamiento cargado correctamente--- \n"); ;
           break;
 
           case "3": if(viewRoomHistory(connection)) System.out.println("---Alojamiento cargado correctamente---\n") ;
