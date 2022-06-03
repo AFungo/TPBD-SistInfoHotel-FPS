@@ -1,11 +1,23 @@
+Compilar y ejecurar en Linux:
 
 1- Pararse en la misma carpeta de SistInfoHotel.java
 
 2-//Compilar
-	javac -cp .:mysql-connector-java-8.0.20.jar SistInfoHotel.java 
+	javac -cp .:mysql-connector-java-8.0.20.jar SistInfoHotel.java
 
 3-//Ejecutar
 	java -cp .:mysql-connector-java-8.0.20.jar SistInfoHotel
+
+
+Compilar y ejecurar en Windows:
+
+1- Pararse en la misma carpeta de SistInfoHotel.java
+
+2-//Compilar
+	javac -cp ".;mysql-connector-java-8.0.20.jar" SistInfoHotel.java
+
+3-//Ejecutar
+	java -cp ".;mysql-connector-java-8.0.20.jar" SistInfoHotel
 
 //Entrar consola de mysql
 mysql -h localhost -u root -p
