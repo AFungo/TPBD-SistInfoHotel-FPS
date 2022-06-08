@@ -229,20 +229,23 @@ create trigger trigger_cliente_ocupa_1_hab
 $$
 delimiter ;
 
--- Este trigger actualmente no funciona
 delimiter $$
 create trigger trigger_clientes_al_mismo_tiempo_misma_hab
 	before insert on ocupada
 	for each row
 		begin
-            declare output varchar(100);
-            declare cant_dias int;
-            declare fecha_ocup date;
-            set cant_dias = (select cant_dias from ocupada oc where new.nro_habitacion = oc.nro_habitacion order by fecha_ocup desc limit 1);
-            set fecha_ocup = (select fecha_ocup from ocupada oc where new.nro_habitacion = oc.nro_habitacion order by fecha_ocup desc limit 1);
-            set output = concat('Habitacion ocupada. La habitacion nro ', new.nro_habitacion,' estara libre desde: ', fecha_ocup);
+            declare output varchar(200);
+            declare cant_dias_registrada int;
+            declare fecha_ocup_registrada date;
+            declare fecha_ocup_varchar date;
             
-			if new.fecha_ocup < date_add(fecha_ocup, interval cant_dias day) then
+            select cant_dias into cant_dias_registrada from ocupada oc where new.nro_habitacion = oc.nro_habitacion order by fecha_ocup desc limit 1;
+            select fecha_ocup into fecha_ocup_registrada from ocupada oc where new.nro_habitacion = oc.nro_habitacion order by fecha_ocup desc limit 1;
+            
+            set fecha_ocup_varchar = date_add(fecha_ocup_registrada, interval cant_dias_registrada day);
+            set output = concat('Habitacion ocupada. La habitacion nro ', new.nro_habitacion,' estara ocupada desde: ', fecha_ocup_registrada, ' hasta: ', fecha_ocup_varchar);
+            
+			if fecha_ocup_registrada < date_add(new.fecha_ocup, interval new.cant_dias day) and new.fecha_ocup < date_add(fecha_ocup_registrada, interval cant_dias_registrada day) then
 				signal sqlstate '45000' set message_text = output;
             end if;
 		end;
